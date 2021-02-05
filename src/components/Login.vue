@@ -12,6 +12,7 @@ export default {
 
 <style scoped>
 .login_container {
-    background-color: aliceblue;
+    background-color: #2b5b6b;
+    height: 100%;
 }
 </style>
