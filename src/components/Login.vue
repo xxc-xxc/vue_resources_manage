@@ -29,8 +29,8 @@ export default {
   data () {
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       rules: {
         username: [
@@ -56,9 +56,16 @@ export default {
             if(!valid) return; // 数据校验不通过，不发起请求
             // 发起登录请求
             const {data: res} = await this.$http.post('login', this.loginForm);
-            if(res.meta.status !== 200) return console.log("登录失败");
-            console.log("登录成功");
-            console.log(res);
+            if(res.meta.status !== 200) return this.$message.error("登录失败");
+            // console.log("登录成功");
+            // console.log(res);
+            this.$message.success("登录成功");
+            // 1. 登录成功之后，将token保存到客户端的sessionStorage中
+            // 1.1 项目中其他接口必须在登录之后访问
+            // 1.2 token只应在当前网站打开期间生效，所以token保存在sessionStorage
+            sessionStorage.setItem("token", res.data.token);
+            // 2. 通过编程式导航跳转到后台主页，路由地址 /home
+            this.$router.push("/home");
         })
     }
   },
