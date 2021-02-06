@@ -6,9 +6,18 @@
                 <img src="../assets/logo.png" alt="头像">
             </div>
             <!-- 表单区域 -->
-            <el-form label-width="80px">
-                <el-form-item label="活动名称">
-                    <el-input></el-input>
+            <el-form class="login_form" :model="loginForm" :rules="rules" ref="loginFormRef">
+                <!-- 账号 -->
+                <el-form-item prop="username">
+                    <el-input prefix-icon="iconfont icon-user" v-model="loginForm.username"></el-input>
+                </el-form-item>
+                <!-- 密码 -->
+                <el-form-item prop="password">
+                    <el-input prefix-icon="iconfont icon-3702mima" v-model="loginForm.password"></el-input>
+                </el-form-item>
+                <el-form-item class="login_btns">
+                    <el-button type="primary">登录</el-button>
+                    <el-button type="info" @click="resetLoginForm">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -17,7 +26,30 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      loginForm: {
+        username: '',
+        password: ''
+      },
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    resetLoginForm () {
+      // console.log(this)
+      this.$refs.loginFormRef.resetFields();
+    }
+  },
 }
 </script>
 
@@ -55,5 +87,18 @@ export default {
             background-color: #eee;
         }
     }
+}
+
+.login_form {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login_btns {
+    display: flex;
+    justify-content: flex-end;
 }
 </style>
