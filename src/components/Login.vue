@@ -16,7 +16,7 @@
                     <el-input prefix-icon="iconfont icon-3702mima" v-model="loginForm.password"></el-input>
                 </el-form-item>
                 <el-form-item class="login_btns">
-                    <el-button type="primary">登录</el-button>
+                    <el-button type="primary" @click="login">登录</el-button>
                     <el-button type="info" @click="resetLoginForm">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -35,19 +35,31 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+          { min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+          { min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
-    resetLoginForm () {
+    resetLoginForm() {
       // console.log(this)
       this.$refs.loginFormRef.resetFields();
+    },
+    login() {
+        this.$refs.loginFormRef.validate(async (valid, obj) => {
+            // console.log(valid);
+            // console.log(obj);
+            if(!valid) return; // 数据校验不通过，不发起请求
+            // 发起登录请求
+            const {data: res} = await this.$http.post('login', this.loginForm);
+            if(res.meta.status !== 200) return console.log("登录失败");
+            console.log("登录成功");
+            console.log(res);
+        })
     }
   },
 }
