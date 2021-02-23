@@ -10,13 +10,13 @@
         <!-- 卡片视图区域 -->
         <el-card>
             <el-row :gutter="10">
-                <el-col :span="8">
-                    <el-input placeholder="请输入内容">
-                        <el-button slot="append" icon="el-icon-search"></el-button>
+                <el-col :span="4">
+                    <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList">
+                        <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary">添加用户</el-button>
+                    <el-button type="primary" @click="addDialogVisible = true">添加用户</el-button>
                 </el-col>
             </el-row>
 
@@ -57,6 +57,33 @@
                 :total="total">
             </el-pagination>
         </el-card>
+
+        <!-- 添加用户对话框 -->
+        <el-dialog
+            title="添加用户"
+            :visible.sync="addDialogVisible"
+            width="30%">
+            <!-- 对话框主体区域 -->
+            <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
+                <el-form-item label="用户名" prop="username">
+                    <el-input v-model="addForm.username"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input v-model="addForm.password"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                    <el-input v-model="addForm.email"></el-input>
+                </el-form-item>
+                <el-form-item label="手机" prop="mobile">
+                    <el-input v-model="addForm.mobile"></el-input>
+                </el-form-item>
+            </el-form>
+            <!-- 底部区域 -->
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -71,7 +98,31 @@ export default {
                 pagesize: 2
             },
             userlist: [],
-            total: 0
+            total: 0, 
+            // 控制添加用户对话框显示与隐藏
+            addDialogVisible: false,
+            addForm: {
+                username: '',
+                password: '',
+                email: '',
+                mobile: ''
+            }, 
+            addFormRules: {
+                username: [
+                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                    {min: 3, max: 10, message: '用户名长度在3-10个字符之间', trigger: 'blur'}
+                ],
+                password: [
+                    {required: true, message: '请输入密码', trigger: 'blur'},
+                    {min: 6, max: 16, message: '密码长度在6-16个字符之间', trigger: 'blur'}
+                ],
+                email: [
+                    {required: true, message: '请输入邮箱', trigger: 'blur'},
+                ],
+                mobile: [
+                    {required: true, message: '请输入手机', trigger: 'blur'},
+                ]
+            }
         }
     },
     created() {
