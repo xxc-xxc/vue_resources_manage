@@ -90,6 +90,34 @@
 <script>
 export default {
     data() {
+
+        // 验证邮箱规则
+        let checkEmail = (rule, value, cb) => {
+            const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+
+            if(regEmail.test(value)) {
+                // 校验通过
+                // cb为回调函数
+                return cb();
+            }
+
+            // 校验不通过
+            cb(new Error('请输入正确的邮箱'))
+        }
+        // 验证手机号规则
+        let checkMobile = (rule, value, cb) => {
+            const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+
+            if(regMobile.test(value)) {
+                // 校验通过
+                // cb为回调函数
+                return cb();
+            }
+
+            // 校验不通过
+            cb(new Error('请输入正确的手机号'))
+        }
+
         return {
             // 获取用户列表参数对象
             queryInfo: {
@@ -118,9 +146,11 @@ export default {
                 ],
                 email: [
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
+                    {validator: checkEmail, trigger: 'blur'}
                 ],
                 mobile: [
                     {required: true, message: '请输入手机', trigger: 'blur'},
+                    {validator: checkMobile, trigger: 'blur'}
                 ]
             }
         }
