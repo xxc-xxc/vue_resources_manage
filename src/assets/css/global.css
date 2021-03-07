@@ -23,3 +23,8 @@ html,body,#app {
 .el-pagination {
     margin-top: 15px;
 }
+
+/* element ui中cascader一级分类占满全屏，需要做如下设置 */
+.el-scrollbar__wrap {
+    height: 300px !important
+}
